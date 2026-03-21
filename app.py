@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import numpy as np
 
 st.set_page_config(
     page_title="ITコンサルファーム 企業研究ツール",
@@ -58,10 +61,47 @@ COMPANIES = {
             "経営幹部候補として事業に携わりたい意欲を伝える",
             "面接は和やかな雰囲気 — 逆質問の時間が長い傾向",
         ],
+        "sources": {
+            "company": [
+                ("公式サイト - 会社概要", "https://dirbato.co.jp/profile/"),
+                ("公式サイト - サービス", "https://dirbato.co.jp/service/"),
+            ],
+            "kpi": [
+                ("公式サイト - 会社概要（売上高）", "https://dirbato.co.jp/profile/"),
+                ("マイナビ2027 - Dirbato", "https://job.mynavi.jp/27/pc/search/corp250725/outline.html"),
+            ],
+            "strengths": [
+                ("公式サイト - サービス", "https://dirbato.co.jp/service/"),
+                ("KOTORA JOURNAL - Dirbato特集", "https://www.kotora.jp/c/51598/"),
+            ],
+            "culture": [
+                ("マイビジョン - Dirbato特徴・社風", "https://my-vision.co.jp/consultant/dirbato"),
+                ("マイビジョン - パートナーインタビュー", "https://my-vision.co.jp/interview/dirbato/interview01"),
+            ],
+            "hiring": [
+                ("コンサルキャリア - Dirbato転職大全", "https://consul-career.com/dirbato-career-change/"),
+                ("公式採用サイト", "https://www.dirbato.co.jp/recruit/"),
+            ],
+            "growth": [
+                ("マイビジョン - 売上推移", "https://my-vision.co.jp/consultant/dirbato"),
+                ("公式サイト - 会社概要", "https://dirbato.co.jp/profile/"),
+            ],
+        },
         "growth": {
             "labels": ["2022/3月期", "2023/3月期", "2024/3月期", "2025/3月期"],
             "revenue": [100, 180, 282, 430],
             "employees": [400, 761, 1100, 1445],
+        },
+        "past_questions": {
+            "面接質問": [
+                {
+                    "q": "選考の状況 / 転職を考えたきっかけ / 転職軸 / 経歴を交えた自己紹介 / OJTで心がけたこと / OJTで苦労したこと / 裁量を持って働くとは？",
+                    "position": "ITコンサルタント",
+                    "date": "25年7月",
+                    "phase": "1次",
+                },
+            ],
+            "フェルミ・ケース": [],
         },
     },
     "ノースサンド": {
@@ -110,10 +150,59 @@ COMPANIES = {
             "離職率の低さの背景にあるカルチャーを理解しておく",
             "論理×感情で人を動かした経験を用意すると効果的",
         ],
+        "sources": {
+            "company": [
+                ("公式サイト - 会社概要", "https://northsand.co.jp/company/"),
+                ("日経新聞 - 上場記事", "https://www.nikkei.com/article/DGXZQOUC1119H0R11C25A1000000/"),
+            ],
+            "kpi": [
+                ("公式サイト - 会社概要（従業員数）", "https://northsand.co.jp/company/"),
+                ("公式IR - 経営成績（売上高）", "https://northsand.co.jp/ir/financial-results/"),
+            ],
+            "strengths": [
+                ("転職note - ノースサンドの強み", "https://tenshoku-base.com/northsand-features/"),
+                ("公式サイト", "https://northsand.co.jp/"),
+            ],
+            "culture": [
+                ("マイビジョン - ノースサンド解説", "https://my-vision.co.jp/consultant/it/firms/northsand"),
+                ("マイビジョン - インタビュー", "https://my-vision.co.jp/consulting-firm/northsand/interview01"),
+            ],
+            "hiring": [
+                ("コンサルキャリア - ノースサンド転職大全", "https://consul-career.com/northsand-career-change/"),
+                ("公式サイト - カルチャー", "https://www.northsand.co.jp/culture"),
+            ],
+            "growth": [
+                ("公式IR - 経営成績", "https://northsand.co.jp/ir/financial-results/"),
+                ("株探 - 決算推移", "https://kabutan.jp/stock/finance?code=446A"),
+            ],
+        },
         "growth": {
             "labels": ["2023/1月期", "2024/1月期", "2025/1月期", "2026/1月期(予)"],
             "revenue": [51, 91.4, 164.1, 250],
             "employees": [600, 1000, 1400, 1646],
+        },
+        "past_questions": {
+            "面接質問": [
+                {
+                    "q": "職務経歴 / なぜ転職を考えた？ / 転職する上での軸は？ / 今選考状況は？ / なぜ現職を選んだ？ / なぜコンサル？ / 弊社志望理由 / 将来のキャリア / これまで記憶に残っている業務",
+                    "position": "ITコンサルタント（未経験可）",
+                    "date": "25年7月",
+                    "phase": "1次",
+                },
+                {
+                    "q": "現職を選んだ理由 / 転職理由と軸 / 現職での成果 / 工夫した点 / 入社後に発揮できる強みと不安点 / 逆質問 / 英語での業務経験 / 資料作成経験",
+                    "position": "ITコンサルタント",
+                    "date": "25年7月",
+                    "phase": "最終面接",
+                },
+                {
+                    "q": "現職を選んだ理由 / 転職理由と軸 / 現職での成果 / 工夫した点 / 入社後に発揮できる強みと不安点 / 英語での業務経験 / 資料作成経験",
+                    "position": "ITコンサル",
+                    "date": "25年7月",
+                    "phase": "最終",
+                },
+            ],
+            "フェルミ・ケース": [],
         },
     },
     "FLUX": {
@@ -161,10 +250,46 @@ COMPANIES = {
             "スタートアップ環境での変化を楽しめる姿勢をアピール",
             "「日本経済に流れを」への自分なりの解釈を用意",
         ],
+        "sources": {
+            "company": [
+                ("公式サイト - 会社概要", "https://flux.jp/company/"),
+                ("公式サイト - About", "https://flux.jp/about/"),
+            ],
+            "kpi": [
+                ("公式サイト - 会社概要（従業員数）", "https://flux.jp/company/"),
+                ("PR TIMES - 資金調達リリース", "https://prtimes.jp/main/html/rd/p/000000039.000039289.html"),
+            ],
+            "strengths": [
+                ("公式サイト", "https://flux.jp/"),
+                ("HERP Careers - FLUX", "https://herp.careers/careers/companies/fluxinc"),
+            ],
+            "culture": [
+                ("FLUX note - カルチャー記事", "https://note.com/flux_inc/n/n76b0ce979608"),
+                ("公式サイト - 採用情報", "https://flux.jp/career/"),
+            ],
+            "hiring": [
+                ("公式サイト - 採用情報", "https://flux.jp/career/"),
+            ],
+            "growth": [
+                ("公式サイト - 会社概要", "https://flux.jp/company/"),
+                ("FLUX公式ニュース - 資金調達", "https://flux.jp/news/597/"),
+            ],
+        },
         "growth": {
             "labels": ["2022年", "2023年", "2024年", "2025年"],
             "revenue": [None, None, None, None],
             "employees": [120, 220, 350, 492],
+        },
+        "past_questions": {
+            "面接質問": [
+                {
+                    "q": "自己紹介 / なぜこのタイミングでの転職なのか / 転職の軸は何か / Fluxにどんな印象を持っているか / 逆に今不明なところはあるか",
+                    "position": "戦略コンサルタント",
+                    "date": "25年7月",
+                    "phase": "1次",
+                },
+            ],
+            "フェルミ・ケース": [],
         },
     },
     "アクティヴァーチ": {
@@ -212,10 +337,40 @@ COMPANIES = {
             "急成長企業で挑戦したい理由を明確に",
             "働き方だけでなく成長意欲もアピール",
         ],
+        "sources": {
+            "company": [
+                ("公式サイト - 会社概要", "https://activarch.co.jp/company/"),
+                ("doda - アクティヴァーチ企業概要", "https://doda.jp/DodaFront/View/Company/j_id__10207111095/"),
+            ],
+            "kpi": [
+                ("doda - 企業概要（従業員数）", "https://doda.jp/DodaFront/View/Company/j_id__10207111095/"),
+                ("マイビジョン - 売上推移", "https://my-vision.co.jp/consultant/general/firms/activarch"),
+            ],
+            "strengths": [
+                ("公式サイト", "https://activarch.co.jp/"),
+                ("CO+ Career - アクティヴァーチ分析", "https://co-p.jp/company-analysis/activarch/"),
+            ],
+            "culture": [
+                ("コンサルネクスト - 代表インタビュー", "https://mirai-works.co.jp/consulnext/industry/activarch/"),
+                ("マイビジョン - アクティヴァーチ解説", "https://my-vision.co.jp/consulting-firm/activarch"),
+            ],
+            "hiring": [
+                ("公式サイト - 採用情報", "https://activarch.co.jp/recruit/"),
+                ("AMBI - アクティヴァーチ", "https://en-ambi.com/agency/a-4045/"),
+            ],
+            "growth": [
+                ("マイビジョン - 売上・従業員推移", "https://my-vision.co.jp/consultant/general/firms/activarch"),
+                ("doda - 企業概要", "https://doda.jp/DodaFront/View/Company/j_id__10207111095/"),
+            ],
+        },
         "growth": {
             "labels": ["2022/10月期", "2023/10月期", "2024/10月期", "2025/10月期(予)"],
             "revenue": [2.3, 6.12, 11.1, 20],
             "employees": [30, 80, 143, 230],
+        },
+        "past_questions": {
+            "面接質問": [],
+            "フェルミ・ケース": [],
         },
     },
     "ストラテジーテック": {
@@ -263,10 +418,41 @@ COMPANIES = {
             "地方創生事業やSaaS事業など独自路線への関心を示す",
             "行動指針「Be Attractive」「Work Positively」と自分の経験を紐づける",
         ],
+        "sources": {
+            "company": [
+                ("公式サイト - 会社概要", "https://strategy-tec.com/company/about"),
+                ("外資就活ネクスト - ストラテジーテック", "https://next.gaishishukatsu.com/companies/4319"),
+            ],
+            "kpi": [
+                ("doda - 企業概要（従業員数）", "https://doda.jp/DodaFront/View/Company/j_id__10197664040/"),
+                ("官報決算データベース（売上高）", "https://catr.jp/companies/13117/163883"),
+                ("Green - 企業ページ", "https://www.green-japan.com/company/7844"),
+            ],
+            "strengths": [
+                ("KOTORA JOURNAL - ストラテジーテック", "https://www.kotora.jp/c/strategytec/"),
+                ("インフォエックス - 特徴・選考情報", "https://infoex.co.jp/category_strategy-tec/"),
+            ],
+            "culture": [
+                ("マイビジョン - ストラテジーテック解説", "https://my-vision.co.jp/consultant/strategy/firms/strategytech-cg"),
+                ("doda - ストラテジーテック", "https://doda.jp/DodaFront/View/Company/j_id__10197664040/"),
+            ],
+            "hiring": [
+                ("ムービン - 転職情報", "https://www.movin.co.jp/gyoukai/firmlist/independence/strategytec.html"),
+                ("公式サイト - 採用情報", "https://strategy-tec.com/recruit/outline"),
+            ],
+            "growth": [
+                ("官報決算データベース", "https://catr.jp/companies/13117/163883"),
+                ("インフォエックス - 売上推移", "https://infoex.co.jp/category_strategy-tec/"),
+            ],
+        },
         "growth": {
             "labels": ["2021/10月期", "2022/10月期", "2023/10月期", "2024年(推定)"],
             "revenue": [14.5, 34, 54, 70],
             "employees": [60, 120, 184, 222],
+        },
+        "past_questions": {
+            "面接質問": [],
+            "フェルミ・ケース": [],
         },
     },
 }
@@ -402,8 +588,8 @@ section.stMain { overflow: auto !important; }
     margin-bottom: 24px;
 }
 .kpi-card {
-    background: #fff;
-    border: 1px solid #e8e8e8;
+    background: #f8f9fb;
+    border: 1px solid #eef0f4;
     border-radius: 10px;
     padding: 18px 14px;
     text-align: center;
@@ -432,6 +618,14 @@ section.stMain { overflow: auto !important; }
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 18px;
+}
+/* st.container(border=True) を section-box 風に */
+div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 12px !important;
+    padding: 8px 16px !important;
+    margin-bottom: 18px !important;
 }
 .section-heading {
     font-size: 1rem;
@@ -473,57 +667,199 @@ section.stMain { overflow: auto !important; }
     line-height: 1.6;
 }
 
-/* ──── Flow badge ──── */
-.flow-badge {
-    display: inline-block;
-    background: #f0f4ff;
-    border: 1px solid #d0dcf0;
+/* ──── Past questions ──── */
+.pq-category {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+.pq-card {
+    background: #f8f9fb;
+    border: 1px solid #eef0f4;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+}
+.pq-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+.pq-badge {
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 10px;
     border-radius: 20px;
-    padding: 6px 18px;
-    font-size: 0.82rem;
-    color: #1a73e8;
+}
+.pq-position {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
+}
+.pq-date {
+    font-size: 0.72rem;
+    color: #aaa;
+}
+.pq-question {
+    font-size: 0.88rem;
+    color: #333;
+    line-height: 1.7;
+}
+.pq-note {
+    font-size: 0.72rem;
+    color: #bbb;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
 }
 
-/* ──── Link button ──── */
+/* ──── Selection flow ──── */
+.flow-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+.flow-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f8f9ff;
+    border: 1px solid #e0e6f0;
+    border-radius: 12px;
+    padding: 14px 20px;
+    min-width: 120px;
+}
+.flow-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.flow-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #222;
+    line-height: 1.4;
+}
+.flow-arrow {
+    color: #bbb;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+}
+
+/* ──── Link button (公式サイトを見る) ──── */
+.site-link-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 32px 0 20px;
+}
 .site-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 20px;
-    border-radius: 8px;
-    background: #1a73e8;
-    color: #fff;
+    gap: 8px;
+    padding: 14px 36px;
+    border-radius: 50px;
+    background: #fff;
+    color: #1a1a2e;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.85rem;
-    transition: background 0.2s;
+    font-size: 0.92rem;
+    letter-spacing: 0.5px;
+    border: 1.5px solid #1a1a2e;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
 }
-.site-link:hover { background: #1557b0; color: #fff; }
-
-/* ──── Streamlit overrides ──── */
-.stButton > button {
-    background: #1a73e8;
+.site-link:hover {
+    background: #1a1a2e;
     color: #fff;
-    border: none;
-    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(26,26,46,0.2);
+    transform: translateY(-1px);
+}
+.site-link:hover svg { fill: #fff; }
+.site-link svg { width: 16px; height: 16px; fill: #1a1a2e; transition: fill 0.3s; }
+
+/* ──── Streamlit button overrides (詳細を見る) ──── */
+.stButton > button {
+    background: #fff;
+    color: #1a1a2e;
+    border: 1.5px solid #1a1a2e;
+    border-radius: 50px;
     font-weight: 600;
-    padding: 8px 0;
-    transition: background 0.2s;
+    font-size: 0.85rem;
+    padding: 10px 0;
+    letter-spacing: 0.8px;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
 }
 .stButton > button:hover {
-    background: #1557b0;
+    background: #1a1a2e;
     color: #fff;
-    border: none;
+    border: 1.5px solid #1a1a2e;
+    box-shadow: 0 4px 15px rgba(26,26,46,0.2);
+    transform: translateY(-1px);
 }
-/* back button */
-.back-button > button {
-    background: #fff !important;
-    color: #666 !important;
-    border: 1px solid #ddd !important;
+/* back button (← 一覧に戻る) */
+.back-button .stButton > button {
+    background: transparent !important;
+    color: #888 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    padding: 4px 0 !important;
+    letter-spacing: 0 !important;
+    box-shadow: none !important;
+    width: auto !important;
+    min-height: 0 !important;
+    white-space: nowrap !important;
 }
-.back-button > button:hover {
-    background: #f5f5f5 !important;
-    color: #333 !important;
+.back-button .stButton > button:hover {
+    background: transparent !important;
+    color: #1a1a2e !important;
+    transform: none !important;
+    box-shadow: none !important;
+    text-decoration: underline !important;
+}
+.back-button .stButton {
+    display: inline-block !important;
+    width: auto !important;
+}
+
+/* ──── Source links ──── */
+.source-links {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed #e0e0e0;
+}
+.source-links .source-label {
+    font-size: 0.68rem;
+    color: #bbb;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.source-links a {
+    font-size: 0.75rem;
+    color: #1a73e8;
+    text-decoration: none;
+    margin-right: 16px;
+    line-height: 1.8;
+}
+.source-links a:hover {
+    text-decoration: underline;
 }
 
 @media (max-width: 768px) {
@@ -532,6 +868,17 @@ section.stMain { overflow: auto !important; }
 }
 </style>
 """, unsafe_allow_html=True)
+
+
+def render_sources(sources_list):
+    """参考リンクをセクション下部に表示"""
+    links = " ".join([f'<a href="{url}" target="_blank">{name}</a>' for name, url in sources_list])
+    st.markdown(f'<div class="source-links"><div class="source-label">SOURCE</div>{links}</div>', unsafe_allow_html=True)
+
+def build_source_html(sources_list):
+    """ソースリンクのHTML文字列を生成（セクション内埋め込み用）"""
+    links = " ".join([f'<a href="{url}" target="_blank">{name}</a>' for name, url in sources_list])
+    return f'<div class="source-links"><div class="source-label">SOURCE</div>{links}</div>'
 
 
 # ============================
@@ -599,7 +946,7 @@ def render_company(key):
 
     # Back button
     st.markdown('<div class="back-button">', unsafe_allow_html=True)
-    if st.button("← 企業一覧に戻る", key="back"):
+    if st.button("← 一覧に戻る", key="back"):
         go_back()
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
@@ -618,31 +965,37 @@ def render_company(key):
     """, unsafe_allow_html=True)
 
     # KPI cards
+    kpi_src = build_source_html(d["sources"]["kpi"]) if "kpi" in d.get("sources", {}) else ""
     st.markdown(f"""
-    <div class="kpi-row">
-        <div class="kpi-card">
-            <div class="kpi-label">従業員数</div>
-            <div class="kpi-value">{d['employees']}</div>
-            <div class="kpi-sub">{d['employees_date']}</div>
+    <div class="section-box">
+        <div class="section-heading" style="border-color:{accent};">基本情報</div>
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">従業員数</div>
+                <div class="kpi-value">{d['employees']}</div>
+                <div class="kpi-sub">{d['employees_date']}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">売上高</div>
+                <div class="kpi-value">{d['revenue']}</div>
+                <div class="kpi-sub">{d['revenue_date']}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">設立</div>
+                <div class="kpi-value" style="font-size:1.1rem;">{d['founded']}</div>
+                <div class="kpi-sub">代表: {d['ceo']}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">本社</div>
+                <div class="kpi-value" style="font-size:0.8rem; line-height:1.4;">{d['hq']}</div>
+            </div>
         </div>
-        <div class="kpi-card">
-            <div class="kpi-label">売上高</div>
-            <div class="kpi-value">{d['revenue']}</div>
-            <div class="kpi-sub">{d['revenue_date']}</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-label">設立</div>
-            <div class="kpi-value" style="font-size:1.1rem;">{d['founded']}</div>
-            <div class="kpi-sub">代表: {d['ceo']}</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-label">本社</div>
-            <div class="kpi-value" style="font-size:0.8rem; line-height:1.4;">{d['hq']}</div>
-        </div>
+        {kpi_src}
     </div>
     """, unsafe_allow_html=True)
 
     # ── ビジョン・ミッション ──
+    company_src = build_source_html(d["sources"]["company"]) if "company" in d.get("sources", {}) else ""
     st.markdown(f"""
     <div class="section-box">
         <div class="section-heading" style="border-color:{accent};">ビジョン・ミッション</div>
@@ -654,63 +1007,195 @@ def render_company(key):
             <span style="font-size:0.75rem; color:#999; font-weight:600;">MISSION</span>
             <p style="color:#222; font-size:1.1rem; font-weight:700; margin:4px 0 0;">「{d['mission']}」</p>
         </div>
+        {company_src}
     </div>
     """, unsafe_allow_html=True)
 
     # ── 得意領域 ──
-    st.markdown(f'<div class="section-box"><div class="section-heading" style="border-color:{accent};">得意領域・サービス</div>', unsafe_allow_html=True)
-    for item in d["strengths"]:
-        st.markdown(f'<div class="list-item"><div class="list-dot" style="background:{accent};"></div>{item}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    sources = d.get("sources", {})
+    strengths_items = "".join([f'<div class="list-item"><div class="list-dot" style="background:{accent};"></div>{item}</div>' for item in d["strengths"]])
+    strengths_src = build_source_html(sources["strengths"]) if "strengths" in sources else ""
+    st.markdown(f"""
+    <div class="section-box">
+        <div class="section-heading" style="border-color:{accent};">得意領域・サービス</div>
+        {strengths_items}
+        {strengths_src}
+    </div>
+    """, unsafe_allow_html=True)
 
     # ── 社風・カルチャー ──
-    st.markdown(f'<div class="section-box"><div class="section-heading" style="border-color:{accent};">社風・カルチャー</div>', unsafe_allow_html=True)
-    for item in d["culture"]:
-        st.markdown(f'<div class="list-item"><div class="list-dot" style="background:{accent};"></div>{item}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    culture_items = "".join([f'<div class="list-item"><div class="list-dot" style="background:{accent};"></div>{item}</div>' for item in d["culture"]])
+    culture_src = build_source_html(sources["culture"]) if "culture" in sources else ""
+    st.markdown(f"""
+    <div class="section-box">
+        <div class="section-heading" style="border-color:{accent};">社風・カルチャー</div>
+        {culture_items}
+        {culture_src}
+    </div>
+    """, unsafe_allow_html=True)
 
     # ── 採用で見ているポイント ──
+    hiring_items = "".join([f'<div class="list-item"><div class="list-dot" style="background:{accent};"></div>{p}</div>' for p in d["hiring_points"]])
+    hiring_src = build_source_html(sources["hiring"]) if "hiring" in sources else ""
+    tips_items = "".join([f'<div class="tip-item" style="border-left-color:{accent};">{t}</div>' for t in d["interview_tips"]])
     col_l, col_r = st.columns(2)
     with col_l:
-        st.markdown(f'<div class="section-box"><div class="section-heading" style="border-color:{accent};">採用で見ているポイント</div>', unsafe_allow_html=True)
-        for p in d["hiring_points"]:
-            st.markdown(f'<div class="list-item"><div class="list-dot" style="background:{accent};"></div>{p}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="margin-top:14px;"><span style="font-size:0.75rem; color:#999;">選考フロー</span><div class="flow-badge" style="margin-top:6px;">{d["selection_flow"]}</div></div></div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="section-box">
+            <div class="section-heading" style="border-color:{accent};">採用で見ているポイント</div>
+            {hiring_items}
+            {hiring_src}
+        </div>
+        """, unsafe_allow_html=True)
 
     with col_r:
-        st.markdown(f'<div class="section-box"><div class="section-heading" style="border-color:{accent};">面接対策のヒント</div>', unsafe_allow_html=True)
-        for t in d["interview_tips"]:
-            st.markdown(f'<div class="tip-item" style="border-left-color:{accent};">{t}</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="section-box">
+            <div class="section-heading" style="border-color:{accent};">面接対策のヒント</div>
+            {tips_items}
+        </div>
+        """, unsafe_allow_html=True)
 
-    # ── 成長推移 ──
+    # ── 選考フロー ──
+    flow_steps = d["selection_flow"].replace("→", "|||").split("|||")
+    flow_html = ""
+    for idx, step in enumerate(flow_steps):
+        step = step.strip()
+        flow_html += f'<div class="flow-step"><div class="flow-num" style="background:{accent};">{idx+1}</div><div class="flow-label">{step}</div></div>'
+        if idx < len(flow_steps) - 1:
+            flow_html += '<div class="flow-arrow">▶</div>'
+    st.markdown(f"""
+    <div class="section-box">
+        <div class="section-heading" style="border-color:{accent};">選考フロー</div>
+        <div class="flow-container">{flow_html}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── 面接過去問 ──
+    pq = d.get("past_questions", {})
+    interview_qs = pq.get("面接質問", [])
+    case_qs = pq.get("フェルミ・ケース", [])
+    has_questions = len(interview_qs) > 0 or len(case_qs) > 0
+
+    if has_questions:
+        pq_html = ""
+        if interview_qs:
+            pq_html += '<div class="pq-category">面接質問</div>'
+            for item in interview_qs:
+                phase_badge = f'<span class="pq-badge">{item["phase"]}</span>' if item.get("phase") else ""
+                pq_html += f"""
+                <div class="pq-card">
+                    <div class="pq-meta">
+                        {phase_badge}
+                        <span class="pq-position">{item.get('position', '')}</span>
+                        <span class="pq-date">{item.get('date', '')}</span>
+                    </div>
+                    <div class="pq-question">{item['q']}</div>
+                </div>"""
+        if case_qs:
+            pq_html += '<div class="pq-category" style="margin-top:16px;">フェルミ推定・ケース面接</div>'
+            for item in case_qs:
+                phase_badge = f'<span class="pq-badge">{item["phase"]}</span>' if item.get("phase") else ""
+                pq_html += f"""
+                <div class="pq-card">
+                    <div class="pq-meta">
+                        {phase_badge}
+                        <span class="pq-position">{item.get('position', '')}</span>
+                        <span class="pq-date">{item.get('date', '')}</span>
+                    </div>
+                    <div class="pq-question">{item['q']}</div>
+                </div>"""
+        st.markdown(f"""
+        <div class="section-box">
+            <div class="section-heading" style="border-color:{accent};">面接過去問</div>
+            {pq_html}
+            <div class="pq-note">※ ストランドパートナーズの求職者フィードバックに基づく過去問情報です</div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div class="section-box">
+            <div class="section-heading" style="border-color:{accent};">面接過去問</div>
+            <div style="color:#999; font-size:0.88rem; padding:12px 0;">現在、過去問データはまだ蓄積されていません。</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── 数字データ（成長推移） ──
     growth = d["growth"]
-    st.markdown(f'<div class="section-box"><div class="section-heading" style="border-color:{accent};">成長推移</div></div>', unsafe_allow_html=True)
+    growth_src = build_source_html(sources["growth"]) if "growth" in sources else ""
 
-    col_chart1, col_chart2 = st.columns(2)
-    with col_chart1:
-        revenue_data = growth["revenue"]
-        if any(v is not None for v in revenue_data):
-            st.markdown("**売上高推移（億円）**")
-            chart_df = pd.DataFrame({
-                "期": growth["labels"],
-                "売上高": [v if v is not None else 0 for v in revenue_data],
-            }).set_index("期")
-            st.bar_chart(chart_df, color=accent)
-        else:
-            st.info("売上高データは非公開です")
+    # --- matplotlib chart helper ---
+    def make_bar_chart(labels, values, title, unit, color, value_fmt=None):
+        plt.rcParams['font.family'] = 'Noto Sans JP'
+        fig, ax = plt.subplots(figsize=(5, 3.2))
+        fig.patch.set_facecolor('#ffffff')
+        ax.set_facecolor('#ffffff')
+        x = np.arange(len(labels))
+        bars = ax.bar(x, values, color=color, width=0.55, edgecolor='none', alpha=0.85, zorder=3)
+        for bar, val in zip(bars, values):
+            if val is not None and val > 0:
+                display = value_fmt(val) if value_fmt else str(val)
+                ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(values)*0.03,
+                        display, ha='center', va='bottom', fontsize=10, fontweight='bold', color='#333')
+        short_labels = [lb.replace("月期", "").replace("/", "\n") for lb in labels]
+        ax.set_xticks(x)
+        ax.set_xticklabels(short_labels, fontsize=8.5, color='#666')
+        ax.set_title(title, fontsize=11, fontweight='bold', color='#333', pad=12, loc='left')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.spines['bottom'].set_color('#e0e0e0')
+        ax.tick_params(left=False, labelleft=False, bottom=False)
+        ax.grid(axis='y', color='#f0f0f0', linewidth=0.8, zorder=0)
+        ax.set_ylim(0, max(values) * 1.25)
+        fig.tight_layout()
+        return fig
 
-    with col_chart2:
-        st.markdown("**従業員数推移（名）**")
-        emp_df = pd.DataFrame({
-            "期": growth["labels"],
-            "従業員数": growth["employees"],
-        }).set_index("期")
-        st.bar_chart(emp_df, color=accent)
+    revenue_data = growth["revenue"]
+    has_revenue = any(v is not None for v in revenue_data)
 
-    # Website link
-    st.markdown(f'<a href="{d["website"]}" target="_blank" class="site-link">🌐 公式サイトを見る</a>', unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown(f'<div class="section-heading" style="border-color:{accent};">数字データ</div>', unsafe_allow_html=True)
+
+        col_chart1, col_chart2 = st.columns(2)
+        with col_chart1:
+            if has_revenue:
+                rev_vals = [v if v is not None else 0 for v in revenue_data]
+                fig1 = make_bar_chart(growth["labels"], rev_vals, "売上高推移", "億円", accent,
+                                      value_fmt=lambda v: f"{v:.0f}億" if v >= 1 else f"{v:.1f}億")
+                st.pyplot(fig1, use_container_width=True)
+                plt.close(fig1)
+            else:
+                st.markdown('<div style="color:#999; font-size:0.88rem; padding:40px 0; text-align:center;">売上高データは非公開です</div>', unsafe_allow_html=True)
+
+        with col_chart2:
+            fig2 = make_bar_chart(growth["labels"], growth["employees"], "従業員数推移", "名", accent,
+                                  value_fmt=lambda v: f"{int(v)}名")
+            st.pyplot(fig2, use_container_width=True)
+            plt.close(fig2)
+
+        if growth_src:
+            st.markdown(growth_src, unsafe_allow_html=True)
+
+    # ── 公式サイト ──
+    st.markdown(f"""
+    <div class="section-box">
+        <div class="section-heading" style="border-color:{accent};">公式サイト</div>
+        <div style="padding: 8px 0;">
+            <a href="{d['website']}" target="_blank" style="color:{accent}; font-size:0.95rem; font-weight:600; text-decoration:none;">
+                🌐 {d['website']}
+            </a>
+            <p style="color:#888; font-size:0.8rem; margin:6px 0 0;">※ 新しいタブで開きます</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Bottom back button
+    st.markdown('<div class="back-button">', unsafe_allow_html=True)
+    if st.button("← 一覧に戻る", key="back_bottom"):
+        go_back()
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ============================
