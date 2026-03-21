@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITコンサルファーム 企業研究ツール | STRAND PARTNERS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: #f5f6fa; color: #222; }
+
+/* ── Header ── */
+.app-header {
+  background: #111;
+  padding: 18px 0 14px;
+  text-align: center;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.app-header .brand {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.25em;
+}
+.app-header .sub {
+  font-size: 0.72rem;
+  color: #aaa;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+}
+
+/* ── Landing ── */
+#landing { display: block; }
+#detail  { display: none; }
+
+.landing-title {
+  text-align: center;
+  padding: 40px 20px 10px;
+}
+.landing-title h1 {
+  font-size: 1.5rem; font-weight: 700; color: #1a1a2e;
+}
+.landing-title p {
+  font-size: 0.85rem; color: #888; margin-top: 6px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+  margin: 28px auto 60px;
+  padding: 0 24px;
+}
+
+.company-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 28px 20px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow .2s, transform .15s;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.company-card:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+  transform: translateY(-3px);
+}
+.company-card img {
+  height: 44px; max-width: 160px; object-fit: contain;
+}
+.company-card .card-fallback {
+  font-size: 1.1rem; font-weight: 900;
+  display: none;
+}
+.company-card .card-name {
+  font-size: 0.85rem; font-weight: 700; color: #1a1a2e;
+}
+.company-card .card-sub {
+  font-size: 0.72rem; color: #999;
+}
+.btn-detail {
+  width: 100%;
+  padding: 9px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: opacity .15s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.btn-detail:hover { opacity: 0.85; }
+
+/* ── Detail ── */
+.detail-wrap {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 20px 0 16px;
+  padding: 8px 18px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: background .15s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.back-btn:hover { background: #f5f5f5; }
+
+.detail-header {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 28px 32px;
+  display: flex; align-items: center; gap: 28px;
+  margin-bottom: 18px;
+}
+.detail-header img {
+  height: 52px; max-width: 180px; object-fit: contain; flex-shrink: 0;
+}
+.detail-header .header-fallback {
+  font-size: 1.3rem; font-weight: 900; flex-shrink: 0;
+  display: none;
+}
+.detail-header .info .name {
+  font-size: 1.35rem; font-weight: 800; color: #1a1a2e;
+}
+.detail-header .info .name-en {
+  font-size: 0.78rem; color: #999; margin-top: 2px;
+}
+.detail-header .info .mission-q {
+  font-size: 0.9rem; color: #555; margin-top: 8px;
+  border-left: 3px solid #ccc;
+  padding-left: 10px;
+  line-height: 1.6;
+}
+
+/* ── Section Box ── */
+.section-box {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 18px;
+}
+.section-heading {
+  font-size: 1rem; font-weight: 700; color: #1a1a2e;
+  border-bottom: 2.5px solid #ccc;
+  padding-bottom: 8px; margin-bottom: 18px;
+  display: inline-block;
+}
+
+/* ── KPI ── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media(max-width:700px) { .kpi-row { grid-template-columns: repeat(2,1fr); } }
+.kpi-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 16px 14px;
+  text-align: center;
+}
+.kpi-label { font-size: 0.72rem; color: #999; font-weight: 600; margin-bottom: 6px; }
+.kpi-value { font-size: 1.3rem; font-weight: 800; color: #1a1a2e; line-height: 1.2; }
+.kpi-sub   { font-size: 0.7rem; color: #bbb; margin-top: 4px; }
+
+/* ── Lists ── */
+.info-list { list-style: none; padding: 0; }
+.info-list li {
+  padding: 8px 0 8px 18px;
+  position: relative;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: #333;
+  border-bottom: 1px solid #f3f3f3;
+}
+.info-list li:last-child { border-bottom: none; }
+.info-list li::before {
+  content: '';
+  position: absolute; left: 0; top: 16px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent, #1a73e8);
+}
+
+/* ── VM ── */
+.vm-block { margin-bottom: 14px; }
+.vm-label { font-size: 0.72rem; color: #999; font-weight: 600; letter-spacing: 0.08em; }
+.vm-text  { font-size: 0.93rem; color: #333; margin-top: 4px; line-height: 1.7; }
+.vm-mission { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
+
+/* ── Flow ── */
+.flow-container {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  margin-top: 4px;
+}
+.flow-step {
+  display: flex; align-items: center; gap: 8px;
+  background: #f8f9fa; border-radius: 8px; padding: 8px 14px;
+}
+.flow-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.flow-label { font-size: 0.82rem; font-weight: 600; color: #333; }
+.flow-arrow { font-size: 0.8rem; color: #bbb; }
+
+/* ── Past Questions ── */
+.pq-item {
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+.pq-meta {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;
+}
+.pq-badge {
+  background: #1a1a2e; color: #fff;
+  font-size: 0.68rem; font-weight: 600;
+  padding: 2px 10px; border-radius: 20px;
+}
+.pq-pos  { font-size: 0.75rem; color: #666; }
+.pq-date { font-size: 0.7rem; color: #aaa; }
+.pq-q    { font-size: 0.88rem; color: #333; line-height: 1.7; }
+.pq-note { font-size: 0.72rem; color: #bbb; margin-top: 12px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+.no-data { color: #bbb; font-size: 0.88rem; padding: 12px 0; }
+
+/* ── Charts ── */
+.charts-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px;
+}
+@media(max-width:600px){ .charts-row { grid-template-columns: 1fr; } }
+.chart-wrap { position: relative; height: 220px; }
+
+/* ── Sources ── */
+.source-block { margin-top: 14px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+.source-label { font-size: 0.65rem; color: #bbb; font-weight: 600; letter-spacing: 0.1em; margin-bottom: 4px; }
+.source-links { display: flex; flex-wrap: wrap; gap: 12px; }
+.source-links a {
+  font-size: 0.75rem; color: #4a90d9; text-decoration: none;
+}
+.source-links a:hover { text-decoration: underline; }
+
+/* ── Website ── */
+.website-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.92rem; font-weight: 600;
+  text-decoration: none;
+  padding: 4px 0;
+}
+.website-link:hover { text-decoration: underline; }
+.website-note { font-size: 0.75rem; color: #999; margin-top: 6px; }
+
+/* ── Bottom back btn ── */
+.bottom-back { margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="app-header">
+  <div class="brand">STRAND PARTNERS</div>
+  <div class="sub">ITコンサルファーム 企業研究ツール</div>
+</header>
+
+<!-- Landing -->
+<div id="landing">
+  <div class="landing-title">
+    <h1>企業を選んで面接準備をはじめよう</h1>
+    <p>各社の基本情報・社風・採用ポイント・過去問をまとめました</p>
+  </div>
+  <div class="grid" id="card-grid"></div>
+</div>
+
+<!-- Detail -->
+<div id="detail">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="showLanding()">← 一覧に戻る</button>
+    <div id="detail-content"></div>
+    <div class="bottom-back">
+      <button class="back-btn" onclick="showLanding()">← 一覧に戻る</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 企業データ
+// ============================================================
+const COMPANIES = {
+  "Dirbato": {
+    name: "株式会社Dirbato",
+    name_en: "Dirbato, Inc.",
+    logo: "https://dirbato.co.jp/assets/images/common/logo.svg",
+    website: "https://dirbato.co.jp/",
+    founded: "2018年10月",
+    ceo: "金山 泰英",
+    hq: "東京都港区赤坂9-7-1 ミッドタウン・タワー32階",
+    employees: "1,445名", employees_date: "2025年3月期",
+    revenue: "430億円", revenue_date: "2025年3月期",
+    accent: "#1a73e8",
+    vision: "既存のコンサルティングファームの枠組みに捉われず、インキュベーション事業を通じてSDGsを含めた社会課題の解決を目指す「ハイブリッドファーム」",
+    mission: "テクノロジーで世界に喜びを。",
+    strengths: [
+      "IT戦略構築・プロジェクトマネジメント・セキュリティ施策",
+      "生成AI関連サービス（内製AI「NeuraBeat」の開発・導入支援）",
+      "DX戦略構想〜設計・開発・運用まで一貫支援",
+      "Salesforce / SAP / ServiceNow等の導入支援",
+      "AI・IoT・ビッグデータ活用の新規事業開発（インキュベーション）",
+      "AWS・Salesforce認定パートナー",
+    ],
+    culture: [
+      "フラットな組織文化 — 役員との距離が近く風通しが良い",
+      "若手への大きな裁量 — 20代中盤でマネージャー昇進の実績あり",
+      "横のつながり重視 — 部活動・勉強会・ユニットプラン等の交流制度",
+      "私服勤務OK — エンジニア出身者が多くカジュアルな雰囲気",
+      "月残業20〜30時間（業界内では短い水準）",
+      "リモートワーク・フレックスタイム制度あり",
+      "D&I（ダイバーシティ＆インクルージョン）推進",
+    ],
+    hiring_points: [
+      "自ら考え行動・チャレンジができる人材を重視",
+      "スキルより「成長したいという意志」が最重要",
+      "面接では成長意欲・論理性・共感力・チーム経験を評価",
+      "深掘りされる3点：「なぜ転職？」「なぜコンサル？」「なぜDirbato？」",
+      "中途入社の約9割がコンサル未経験者（SE・SIer出身が多い）",
+    ],
+    tips: [
+      "「ハイブリッドファーム」構想への共感を具体的に語る",
+      "テクノロジーへの関心を過去の行動ベースで示す",
+      "経営幹部候補として事業に携わりたい意欲を伝える",
+      "面接は和やかな雰囲気 — 逆質問の時間が長い傾向",
+    ],
+    flow: ["書類選考", "1次面接（人事面談）", "最終面接（役員面談）"],
+    sources: {
+      kpi: [
+        { label: "公式サイト - 会社概要（売上高）", url: "https://dirbato.co.jp/profile/" },
+        { label: "マイナビ2027 - Dirbato", url: "https://job.mynavi.jp/27/pc/search/corp250725/outline.html" },
+      ],
+      company: [
+        { label: "公式サイト - 会社概要", url: "https://dirbato.co.jp/profile/" },
+        { label: "公式サイト - サービス", url: "https://dirbato.co.jp/service/" },
+      ],
+      strengths: [
+        { label: "公式サイト - サービス", url: "https://dirbato.co.jp/service/" },
+        { label: "KOTORA JOURNAL - Dirbato特集", url: "https://www.kotora.jp/c/51598/" },
+      ],
+      culture: [
+        { label: "マイビジョン - Dirbato特徴・社風", url: "https://my-vision.co.jp/consultant/dirbato" },
+        { label: "マイビジョン - パートナーインタビュー", url: "https://my-vision.co.jp/interview/dirbato/interview01" },
+      ],
+      hiring: [
+        { label: "コンサルキャリア - Dirbato転職大全", url: "https://consul-career.com/dirbato-career-change/" },
+        { label: "公式採用サイト", url: "https://www.dirbato.co.jp/recruit/" },
+      ],
+      growth: [
+        { label: "マイビジョン - 売上推移", url: "https://my-vision.co.jp/consultant/dirbato" },
+        { label: "公式サイト - 会社概要", url: "https://dirbato.co.jp/profile/" },
+      ],
+    },
+    growth: {
+      labels: ["2022/3月期","2023/3月期","2024/3月期","2025/3月期"],
+      revenue: [100,180,282,430],
+      employees: [400,761,1100,1445],
+    },
+    questions: [
+      { phase:"1次", position:"ITコンサルタント", date:"25年7月",
+        q:"選考の状況 / 転職を考えたきっかけ / 転職軸 / 経歴を交えた自己紹介 / OJTで心がけたこと / OJTで苦労したこと / 裁量を持って働くとは？" },
+    ],
+  },
+
+  "ノースサンド": {
+    name: "株式会社ノースサンド",
+    name_en: "Northsand, Inc.",
+    logo: "https://northsand.co.jp/wp-content/themes/vis/assets/common/img/logo.svg",
+    website: "https://northsand.co.jp/",
+    founded: "2015年7月",
+    ceo: "前田 知紘",
+    hq: "東京都中央区銀座4-12-15 歌舞伎座タワー7F",
+    employees: "1,646名", employees_date: "2025年10月末",
+    revenue: "164.1億円", revenue_date: "2025年1月期",
+    accent: "#0091da",
+    vision: "世界をデザインする",
+    mission: "カッコいい会社を増やす",
+    strengths: [
+      "ITコンサルティング（売上の約8割）— IT中期計画策定・M&A後のシステム統合/PMI",
+      "ERP/SaaS導入・クラウド移行・データ基盤構築",
+      "ビジネスコンサルティング（売上の約2割）— 中期経営計画策定・業務改善",
+      "生成AI実装支援・DX戦略立案",
+      "戦略立案から実装・定着化まで一気通貫の「ハイブリッド型」",
+      "社内ベンチャー支援・ノーコードツール導入",
+    ],
+    culture: [
+      "徹底した「人」中心の経営思想 — スキルだけでなく人間力を重視",
+      "「愛嬌・素直さ・しつこさ」を持つ泥臭い人材を高く評価",
+      "フラットな組織文化・透明性の高い評価制度",
+      "離職率 約4.8%（業界平均約30%に対して圧倒的に低い）",
+      "「働きがいのある会社」8年連続認定",
+      "2025年11月 東証グロース市場に上場",
+      "8つの行動指針「8 Rules」を全社で共有",
+    ],
+    hiring_points: [
+      "「人を大切にする」カルチャーへの共感が最重要",
+      "素直さ・愛嬌・しつこさがある人物像を求める",
+      "「なぜノースサンドなのか？」への明確な回答が必須",
+      "5年後・3年後のキャリアプランの具体性を問われる",
+      "人柄・価値観の一致が最重視（スキルより人物像）",
+    ],
+    tips: [
+      "8 Rulesを事前に理解し、自分の経験と紐づけて語る",
+      "「カッコいい会社を増やす」への共感を具体的に伝える",
+      "離職率の低さの背景にあるカルチャーを理解しておく",
+      "論理×感情で人を動かした経験を用意すると効果的",
+    ],
+    flow: ["書類選考", "1次面接（人事面談）", "最終面接（役員面談）"],
+    sources: {
+      kpi: [
+        { label: "公式サイト - 会社概要（従業員数）", url: "https://northsand.co.jp/company/" },
+        { label: "公式IR - 経営成績（売上高）", url: "https://northsand.co.jp/ir/financial-results/" },
+      ],
+      company: [
+        { label: "公式サイト - 会社概要", url: "https://northsand.co.jp/company/" },
+        { label: "日経新聞 - 上場記事", url: "https://www.nikkei.com/article/DGXZQOUC1119H0R11C25A1000000/" },
+      ],
+      strengths: [
+        { label: "転職note - ノースサンドの強み", url: "https://tenshoku-base.com/northsand-features/" },
+        { label: "公式サイト", url: "https://northsand.co.jp/" },
+      ],
+      culture: [
+        { label: "マイビジョン - ノースサンド解説", url: "https://my-vision.co.jp/consultant/it/firms/northsand" },
+        { label: "マイビジョン - インタビュー", url: "https://my-vision.co.jp/consulting-firm/northsand/interview01" },
+      ],
+      hiring: [
+        { label: "コンサルキャリア - ノースサンド転職大全", url: "https://consul-career.com/northsand-career-change/" },
+        { label: "公式サイト - カルチャー", url: "https://www.northsand.co.jp/culture" },
+      ],
+      growth: [
+        { label: "公式IR - 経営成績", url: "https://northsand.co.jp/ir/financial-results/" },
+        { label: "株探 - 決算推移", url: "https://kabutan.jp/stock/finance?code=446A" },
+      ],
+    },
+    growth: {
+      labels: ["2023/1月期","2024/1月期","2025/1月期","2026/1月期(予)"],
+      revenue: [51,91.4,164.1,250],
+      employees: [600,1000,1400,1646],
+    },
+    questions: [
+      { phase:"1次", position:"ITコンサルタント（未経験可）", date:"25年7月",
+        q:"職務経歴 / なぜ転職を考えた？ / 転職する上での軸は？ / 今選考状況は？ / なぜ現職を選んだ？ / なぜコンサル？ / 弊社志望理由 / 将来のキャリア / これまで記憶に残っている業務" },
+      { phase:"最終", position:"ITコンサルタント", date:"25年7月",
+        q:"現職を選んだ理由 / 転職理由と軸 / 現職での成果 / 工夫した点 / 入社後に発揮できる強みと不安点 / 逆質問 / 英語での業務経験 / 資料作成経験" },
+      { phase:"最終", position:"ITコンサル", date:"25年7月",
+        q:"現職を選んだ理由 / 転職理由と軸 / 現職での成果 / 工夫した点 / 入社後に発揮できる強みと不安点 / 英語での業務経験 / 資料作成経験" },
+    ],
+  },
+
+  "FLUX": {
+    name: "株式会社FLUX",
+    name_en: "FLUX Inc.",
+    logo: "https://flux.jp/wp-content/themes/flux_v3/assets/img/common/logo.svg",
+    website: "https://flux.jp/",
+    founded: "2018年5月",
+    ceo: "永井 元治",
+    hq: "東京都港区赤坂9-7-1 ミッドタウン・タワー24階",
+    employees: "492名", employees_date: "2026年2月末・連結",
+    revenue: "非公開", revenue_date: "累計調達100億円",
+    accent: "#6c5ce7",
+    vision: "AI時代における企業のベストパートナーになる",
+    mission: "日本経済に流れを",
+    strengths: [
+      "FLUX Insight — AIコンサルティング（戦略〜実行〜改善の一気通貫）",
+      "FLUX AutoStream — AIによるメディア・マーケティング支援",
+      "FLUX Agent — AI活用の人材紹介サービス",
+      "エンタープライズ企業のAI戦略立案・実装支援",
+      "新規事業開発・業務効率化の伴走型コンサルティング",
+      "デジタルマーケティング・広告収益最大化",
+    ],
+    culture: [
+      "プロスポーツチームのような組織 — 常に変化・成長し続ける環境",
+      "フラットかつオープン — 雇用形態や年齢に関わらずValuesを体現",
+      "多様なバックグラウンド — メルカリ・DeNA・三菱UFJ等からの転職者多数",
+      "情報のオープン化 — Slack/Notionで全情報をドキュメント化",
+      "成長重視 — 豊富な挑戦機会とフェアな評価制度",
+      "社名「FLUX」＝ 絶え間ない変化を意味する",
+    ],
+    hiring_points: [
+      "自律性・主体性 — 自ら課題設定し取り組む姿勢",
+      "変化への柔軟性 — 急成長環境を楽しめるマインド",
+      "Mission/Valueへの共感度を重視",
+      "前例のない課題への好奇心と思考力",
+      "異なる専門知識を持つメンバーとの共創力",
+    ],
+    tips: [
+      "5つのValues（80/20, Quick and Small等）を理解し自分の言葉で語る",
+      "AIやテクノロジーへの関心を具体的エピソードで示す",
+      "スタートアップ環境での変化を楽しめる姿勢をアピール",
+      "「日本経済に流れを」への自分なりの解釈を用意",
+    ],
+    flow: ["書類選考", "1次面接（人事面談）", "最終面接（役員面談）"],
+    sources: {
+      kpi: [
+        { label: "公式サイト - 会社概要（従業員数）", url: "https://flux.jp/company/" },
+        { label: "PR TIMES - 資金調達リリース", url: "https://prtimes.jp/main/html/rd/p/000000039.000039289.html" },
+      ],
+      company: [
+        { label: "公式サイト - 会社概要", url: "https://flux.jp/company/" },
+        { label: "公式サイト - About", url: "https://flux.jp/about/" },
+      ],
+      strengths: [
+        { label: "公式サイト", url: "https://flux.jp/" },
+        { label: "HERP Careers - FLUX", url: "https://herp.careers/careers/companies/fluxinc" },
+      ],
+      culture: [
+        { label: "FLUX note - カルチャー記事", url: "https://note.com/flux_inc/n/n76b0ce979608" },
+        { label: "公式サイト - 採用情報", url: "https://flux.jp/career/" },
+      ],
+      hiring: [
+        { label: "公式サイト - 採用情報", url: "https://flux.jp/career/" },
+      ],
+      growth: [
+        { label: "公式サイト - 会社概要", url: "https://flux.jp/company/" },
+        { label: "FLUX公式ニュース - 資金調達", url: "https://flux.jp/news/597/" },
+      ],
+    },
+    growth: {
+      labels: ["2022年","2023年","2024年","2025年"],
+      revenue: [null,null,null,null],
+      employees: [120,220,350,492],
+    },
+    questions: [
+      { phase:"1次", position:"戦略コンサルタント", date:"25年7月",
+        q:"自己紹介 / なぜこのタイミングでの転職なのか / 転職の軸は何か / FLUXにどんな印象を持っているか / 逆に今不明なところはあるか" },
+    ],
+  },
+
+  "アクティヴァーチ": {
+    name: "株式会社アクティヴァーチ・コンサルティング",
+    name_en: "Activarch Consulting, Inc.",
+    logo: "https://activarch.co.jp/home/wp-content/themes/activarch/assets/images/common/logo_activarch.svg",
+    website: "https://activarch.co.jp/",
+    founded: "2020年11月",
+    ceo: "福井 康司",
+    hq: "東京都港区虎ノ門2-6-1 虎ノ門ヒルズステーションタワー39階",
+    employees: "約200〜230名", employees_date: "2026年時点",
+    revenue: "約11.1億円", revenue_date: "2024年10月期",
+    accent: "#f39c12",
+    vision: "人と人をつなぐ「架け橋（arch）」となり、クライアントの可能性を最大限に引き出す",
+    mission: "Activate your potential — 無限の可能性を解き放つ",
+    strengths: [
+      "ITコンサルティング — IT戦略立案・業務分析・要件定義・PMO支援",
+      "DXコンサルティング — DX企画立案・AI/IoT実装支援",
+      "AIコンサルティング — AI戦略策定〜セキュアな実装・内製化",
+      "戦略/インキュベーション — 全社・事業戦略策定・CIOアドバイザリ",
+      "現場密着型のハンズオン型コンサルティングが特徴",
+      "セキュリティ対策支援",
+    ],
+    culture: [
+      "フランクでフラットなカルチャー — 殺伐とした競争文化ではないオープンな環境",
+      "若くエネルギッシュ — 社員同士のコミュニケーションが活発",
+      "ハイブリッド勤務・月残業20時間以内（業界トップクラスの働きやすさ）",
+      "絶対評価制度 — 年次/役職に関係なくスキルと実績で評価",
+      "大手外資コンサル・野村證券等出身者が経営陣を構成",
+      "コアバリュー：Close Communication / Pursuing Quality / Fast & Flexible",
+    ],
+    hiring_points: [
+      "コミュニケーション能力 — 課題を引き出し整理するスキル",
+      "向上心・主体的な学習姿勢を最重視",
+      "新しい技術や情報を常にキャッチアップする姿勢",
+      "ソリューションを伝えてプロジェクトを動かす力",
+      "コンサル未経験者でも積極採用",
+    ],
+    tips: [
+      "コアバリュー3つを理解し、過去の行動で体現できた例を用意",
+      "ハンズオン型コンサルへの共感を自分の言葉で語る",
+      "急成長企業で挑戦したい理由を明確に",
+      "働き方だけでなく成長意欲もアピール",
+    ],
+    flow: ["書類選考", "1次面接（人事面談）", "最終面接（役員面談）"],
+    sources: {
+      kpi: [
+        { label: "doda - 企業概要（従業員数）", url: "https://doda.jp/DodaFront/View/Company/j_id__10207111095/" },
+        { label: "マイビジョン - 売上推移", url: "https://my-vision.co.jp/consultant/general/firms/activarch" },
+      ],
+      company: [
+        { label: "公式サイト - 会社概要", url: "https://activarch.co.jp/company/" },
+        { label: "doda - アクティヴァーチ企業概要", url: "https://doda.jp/DodaFront/View/Company/j_id__10207111095/" },
+      ],
+      strengths: [
+        { label: "公式サイト", url: "https://activarch.co.jp/" },
+        { label: "CO+ Career - アクティヴァーチ分析", url: "https://co-p.jp/company-analysis/activarch/" },
+      ],
+      culture: [
+        { label: "コンサルネクスト - 代表インタビュー", url: "https://mirai-works.co.jp/consulnext/industry/activarch/" },
+        { label: "マイビジョン - アクティヴァーチ解説", url: "https://my-vision.co.jp/consulting-firm/activarch" },
+      ],
+      hiring: [
+        { label: "公式サイト - 採用情報", url: "https://activarch.co.jp/recruit/" },
+        { label: "AMBI - アクティヴァーチ", url: "https://en-ambi.com/agency/a-4045/" },
+      ],
+      growth: [
+        { label: "マイビジョン - 売上・従業員推移", url: "https://my-vision.co.jp/consultant/general/firms/activarch" },
+        { label: "doda - 企業概要", url: "https://doda.jp/DodaFront/View/Company/j_id__10207111095/" },
+      ],
+    },
+    growth: {
+      labels: ["2022/10月期","2023/10月期","2024/10月期","2025/10月期(予)"],
+      revenue: [2.3,6.12,11.1,20],
+      employees: [30,80,143,230],
+    },
+    questions: [],
+  },
+
+  "ストラテジーテック": {
+    name: "株式会社ストラテジーテック・コンサルティング",
+    name_en: "StrategyTec Consulting, Inc.",
+    logo: "https://strategy-tec.com/common/logo/logo1.svg",
+    website: "https://strategy-tec.com/",
+    founded: "2019年11月",
+    ceo: "三浦 大地",
+    hq: "東京都中央区八重洲2-2-1 東京ミッドタウン八重洲 セントラルタワー8階",
+    employees: "約222名", employees_date: "2025年11月時点",
+    revenue: "54億円", revenue_date: "2023年10月期",
+    accent: "#e74c3c",
+    vision: "世界中の叡智を集結し、新たなるイノベーションを描き続けるデジタルイノベーションプラットフォーマー",
+    mission: "変革を通じて、より良い未来を創る",
+    strengths: [
+      "戦略・ITコンサルティング — DX推進・新規事業開発（事業の約40%が戦略案件）",
+      "AI・機械学習・IoT・5G通信技術の最先端テクノロジー",
+      "サイバーセキュリティ・クラウド（AWS/Azure/Google）",
+      "自社プロダクト「ContactEARTH」「セルキャリ」等のSaaS事業",
+      "地方創生事業 — 自治体連携の地域経済活性化・スマートシティ構想",
+      "弘前・秋田・仙台に地方拠点を展開",
+    ],
+    culture: [
+      "フラットな組織 — タイトルや経験に関わらずフラットに接する文化",
+      "ワンプール制 — 領域を限定せず様々な業界・テーマを経験可能",
+      "チャレンジ精神重視 — 自分の枠にとらわれず手を挙げる人が多い",
+      "平均年齢34〜35歳 — BIG4・大手外資系出身者も在籍",
+      "書籍執筆や新規プロダクト開発など多様な挑戦機会あり",
+      "個を尊重するカルチャー",
+    ],
+    hiring_points: [
+      "論理的思考力とコミュニケーション能力（ベーススキル）",
+      "IT素養 — SIer出身者・SE経験者のニーズが高い",
+      "人柄重視 — 「Be Attractive（人として魅力的であろう）」",
+      "主体性・積極性 — 最新トレンドを自ら学ぶ姿勢",
+      "応募条件：大卒以上、コンサル経験 or 経営企画1年以上",
+    ],
+    tips: [
+      "戦略案件40%という強みに魅力を感じる理由を具体的に",
+      "ワンプール制で幅広い経験を積みたい意欲をアピール",
+      "地方創生事業やSaaS事業など独自路線への関心を示す",
+      "行動指針「Be Attractive」「Work Positively」と自分の経験を紐づける",
+    ],
+    flow: ["書類選考", "1次面接（人事面談）", "最終面接（役員面談）"],
+    sources: {
+      kpi: [
+        { label: "doda - 企業概要（従業員数）", url: "https://doda.jp/DodaFront/View/Company/j_id__10197664040/" },
+        { label: "官報決算データベース（売上高）", url: "https://catr.jp/companies/13117/163883" },
+        { label: "Green - 企業ページ", url: "https://www.green-japan.com/company/7844" },
+      ],
+      company: [
+        { label: "公式サイト - 会社概要", url: "https://strategy-tec.com/company/about" },
+        { label: "外資就活ネクスト - ストラテジーテック", url: "https://next.gaishishukatsu.com/companies/4319" },
+      ],
+      strengths: [
+        { label: "KOTORA JOURNAL - ストラテジーテック", url: "https://www.kotora.jp/c/strategytec/" },
+        { label: "インフォエックス - 特徴・選考情報", url: "https://infoex.co.jp/category_strategy-tec/" },
+      ],
+      culture: [
+        { label: "マイビジョン - ストラテジーテック解説", url: "https://my-vision.co.jp/consultant/strategy/firms/strategytech-cg" },
+        { label: "doda - ストラテジーテック", url: "https://doda.jp/DodaFront/View/Company/j_id__10197664040/" },
+      ],
+      hiring: [
+        { label: "ムービン - 転職情報", url: "https://www.movin.co.jp/gyoukai/firmlist/independence/strategytec.html" },
+        { label: "公式サイト - 採用情報", url: "https://strategy-tec.com/recruit/outline" },
+      ],
+      growth: [
+        { label: "官報決算データベース", url: "https://catr.jp/companies/13117/163883" },
+        { label: "インフォエックス - 売上推移", url: "https://infoex.co.jp/category_strategy-tec/" },
+      ],
+    },
+    growth: {
+      labels: ["2021/10月期","2022/10月期","2023/10月期","2024年(推定)"],
+      revenue: [14.5,34,54,70],
+      employees: [60,120,184,222],
+    },
+    questions: [],
+  },
+};
+
+// ============================================================
+// ユーティリティ
+// ============================================================
+function buildSourceHtml(sources) {
+  if (!sources || sources.length === 0) return '';
+  const links = sources.map(s =>
+    `<a href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`
+  ).join('');
+  return `<div class="source-block"><div class="source-label">SOURCE</div><div class="source-links">${links}</div></div>`;
+}
+
+function buildList(items, accent) {
+  return `<ul class="info-list" style="--accent:${accent}">` +
+    items.map(i => `<li>${i}</li>`).join('') + `</ul>`;
+}
+
+const chartInstances = {};
+function destroyCharts() {
+  Object.values(chartInstances).forEach(c => c.destroy());
+  Object.keys(chartInstances).forEach(k => delete chartInstances[k]);
+}
+
+function drawChart(canvasId, labels, data, label, accent, unitSuffix) {
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return;
+  const hasData = data.some(v => v !== null && v !== undefined);
+  if (!hasData) {
+    ctx.parentElement.innerHTML = '<div style="color:#bbb;font-size:0.85rem;text-align:center;padding:80px 0;">非公開</div>';
+    return;
+  }
+  const values = data.map(v => v ?? 0);
+  chartInstances[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: accent + 'cc',
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
+        datalabels: { display: false },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { color: '#e0e0e0' },
+          ticks: { font: { size: 11, family: 'Noto Sans JP' }, color: '#888' }
+        },
+        y: {
+          display: false,
+          grid: { display: false },
+          max: Math.max(...values) * 1.3,
+        }
+      },
+      // カスタムデータラベル（plugin）
+      layout: { padding: { top: 28 } },
+    },
+    plugins: [{
+      id: 'topLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx, data } = chart;
+        chart.getDatasetMeta(0).data.forEach((bar, i) => {
+          const val = data.datasets[0].data[i];
+          if (!val) return;
+          const display = unitSuffix === '億'
+            ? (val >= 1 ? val + '億' : val + '億')
+            : Math.round(val) + '名';
+          ctx.save();
+          ctx.font = 'bold 11px Noto Sans JP, sans-serif';
+          ctx.fillStyle = '#444';
+          ctx.textAlign = 'center';
+          ctx.fillText(display, bar.x, bar.y - 6);
+          ctx.restore();
+        });
+      }
+    }]
+  });
+}
+
+// ============================================================
+// Landing
+// ============================================================
+function renderLanding() {
+  const grid = document.getElementById('card-grid');
+  grid.innerHTML = '';
+  Object.entries(COMPANIES).forEach(([key, d]) => {
+    const card = document.createElement('div');
+    card.className = 'company-card';
+    card.innerHTML = `
+      <img src="${d.logo}" alt="${key}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div class="card-fallback" style="color:${d.accent}">${key}</div>
+      <div class="card-name">${d.name}</div>
+      <div class="card-sub">${d.employees} / ${d.revenue}</div>
+      <button class="btn-detail" style="background:${d.accent}">詳細を見る</button>
+    `;
+    card.querySelector('.btn-detail').addEventListener('click', () => showDetail(key));
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+// Detail
+// ============================================================
+function showDetail(key) {
+  destroyCharts();
+  const d = COMPANIES[key];
+  const a = d.accent;
+
+  // Flow
+  const flowHtml = d.flow.map((step, i) =>
+    `<div class="flow-step">
+       <div class="flow-num" style="background:${a}">${i+1}</div>
+       <div class="flow-label">${step}</div>
+     </div>${i < d.flow.length-1 ? '<div class="flow-arrow">▶</div>' : ''}`
+  ).join('');
+
+  // Questions
+  let pqHtml = '';
+  if (d.questions && d.questions.length > 0) {
+    pqHtml = d.questions.map(q => `
+      <div class="pq-item">
+        <div class="pq-meta">
+          <span class="pq-badge">${q.phase}</span>
+          <span class="pq-pos">${q.position}</span>
+          <span class="pq-date">${q.date}</span>
+        </div>
+        <div class="pq-q">${q.q}</div>
+      </div>`).join('');
+    pqHtml += '<p class="pq-note">※ ストランドパートナーズの求職者フィードバックに基づく過去問情報です</p>';
+  } else {
+    pqHtml = '<p class="no-data">現在、過去問データはまだ蓄積されていません。</p>';
+  }
+
+  const hasRevenue = d.growth.revenue.some(v => v !== null);
+
+  document.getElementById('detail-content').innerHTML = `
+    <!-- Header -->
+    <div class="detail-header">
+      <img src="${d.logo}" alt="${key}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div class="header-fallback" style="color:${a}">${key}</div>
+      <div class="info">
+        <div class="name">${d.name}</div>
+        <div class="name-en">${d.name_en}</div>
+        <div class="mission-q">「${d.mission}」</div>
+      </div>
+    </div>
+
+    <!-- 基本情報 -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">基本情報</div>
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">従業員数</div>
+          <div class="kpi-value">${d.employees}</div>
+          <div class="kpi-sub">${d.employees_date}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">売上高</div>
+          <div class="kpi-value">${d.revenue}</div>
+          <div class="kpi-sub">${d.revenue_date}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">設立</div>
+          <div class="kpi-value" style="font-size:1.05rem">${d.founded}</div>
+          <div class="kpi-sub">代表: ${d.ceo}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">本社</div>
+          <div class="kpi-value" style="font-size:0.78rem;line-height:1.5">${d.hq}</div>
+        </div>
+      </div>
+      ${buildSourceHtml(d.sources.kpi)}
+    </div>
+
+    <!-- ビジョン・ミッション -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">ビジョン・ミッション</div>
+      <div class="vm-block">
+        <div class="vm-label">VISION</div>
+        <div class="vm-text">${d.vision}</div>
+      </div>
+      <div class="vm-block">
+        <div class="vm-label">MISSION</div>
+        <div class="vm-text vm-mission">「${d.mission}」</div>
+      </div>
+      ${buildSourceHtml(d.sources.company)}
+    </div>
+
+    <!-- 得意領域・サービス -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">得意領域・サービス</div>
+      ${buildList(d.strengths, a)}
+      ${buildSourceHtml(d.sources.strengths)}
+    </div>
+
+    <!-- 社風・カルチャー -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">社風・カルチャー</div>
+      ${buildList(d.culture, a)}
+      ${buildSourceHtml(d.sources.culture)}
+    </div>
+
+    <!-- 採用ポイント & ヒント -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="section-box" style="margin-bottom:0">
+        <div class="section-heading" style="border-color:${a}">採用で見ているポイント</div>
+        ${buildList(d.hiring_points, a)}
+        ${buildSourceHtml(d.sources.hiring)}
+      </div>
+      <div class="section-box" style="margin-bottom:0">
+        <div class="section-heading" style="border-color:${a}">面接対策のヒント</div>
+        ${buildList(d.tips, a)}
+      </div>
+    </div>
+    <div style="margin-bottom:18px"></div>
+
+    <!-- 選考フロー -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">選考フロー</div>
+      <div class="flow-container">${flowHtml}</div>
+    </div>
+
+    <!-- 面接過去問 -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">面接過去問</div>
+      ${pqHtml}
+    </div>
+
+    <!-- 数字データ -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">数字データ</div>
+      <div class="charts-row">
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:#555;margin-bottom:8px">売上高推移（億円）</div>
+          <div class="chart-wrap"><canvas id="chart-rev"></canvas></div>
+        </div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:#555;margin-bottom:8px">従業員数推移（名）</div>
+          <div class="chart-wrap"><canvas id="chart-emp"></canvas></div>
+        </div>
+      </div>
+      ${buildSourceHtml(d.sources.growth)}
+    </div>
+
+    <!-- 公式サイト -->
+    <div class="section-box">
+      <div class="section-heading" style="border-color:${a}">公式サイト</div>
+      <a href="${d.website}" target="_blank" rel="noopener" class="website-link" style="color:${a}">
+        🌐 ${d.website}
+      </a>
+      <div class="website-note">※ 新しいタブで開きます</div>
+    </div>
+  `;
+
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('detail').style.display = 'block';
+  window.scrollTo(0, 0);
+
+  // Charts
+  setTimeout(() => {
+    drawChart('chart-rev', d.growth.labels, d.growth.revenue, '売上高', a, '億');
+    drawChart('chart-emp', d.growth.labels, d.growth.employees, '従業員数', a, '名');
+  }, 50);
+}
+
+function showLanding() {
+  destroyCharts();
+  document.getElementById('detail').style.display = 'none';
+  document.getElementById('landing').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+// Init
+renderLanding();
+</script>
+</body>
+</html>
